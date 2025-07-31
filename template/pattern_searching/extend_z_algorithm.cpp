@@ -29,3 +29,36 @@ std::vector<int> extend_z_algorithm(TgtRandIter target_begin, TgtRandIter target
     }
     return extend_Z;
 }
+
+namespace ranges {
+    template <std::ranges::random_access_range Range>
+    std::vector<int> z_algorithm(const Range& range) {
+        auto begin = std::ranges::begin(range);
+        int n = std::ranges::size(range);
+        std::vector<int> Z(n, 0);
+        Z[0] = n;
+        int Z_box_left = 0, Z_box_right = 0;
+        for (int i = 1; i < n; ++i) {
+            if (i < Z_box_right) Z[i] = std::min(Z[i - Z_box_left], Z_box_right - i);
+            while (i + Z[i] < n && *(begin + Z[i]) == *(begin + i + Z[i])) Z[i]++;
+            if (i + Z[i] > Z_box_right) Z_box_left = i, Z_box_right = i + Z[i];
+        }
+        return Z;
+    }
+
+    template <std::ranges::random_access_range TargetRange, std::ranges::random_access_range PatternRange>
+    std::vector<int> extend_z_algorithm(const TargetRange& target, const PatternRange& pattern) {
+        auto target_begin = std::ranges::begin(target);
+        auto pattern_begin = std::ranges::begin(pattern);
+        int n = std::ranges::size(target), m = std::ranges::size(pattern);
+        auto Z = z_algorithm(pattern);
+        std::vector<int> extend_Z(n, 0);
+        int Z_box_left = 0, Z_box_right = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i < Z_box_right) extend_Z[i] = std::min(Z[i - Z_box_left], Z_box_right - i);
+            while (i + extend_Z[i] < n && extend_Z[i] < m && *(target_begin + i + extend_Z[i]) == *(pattern_begin + extend_Z[i])) extend_Z[i]++;
+            if (i + extend_Z[i] > Z_box_right) Z_box_left = i, Z_box_right = i + extend_Z[i];
+        }
+        return extend_Z;
+    }
+}
