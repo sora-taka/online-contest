@@ -14,13 +14,15 @@ void solve()
     {
         int x;
         cin >> x;
-        a[x % k]++;
+        if (x % k > k / 2) a[k - x % k]++;
+        else a[x % k]++;
     }
     for (int i = 0; i < n; ++i)
     {
         int x;
         cin >> x;
-        b[x % k]++;
+        if (x % k > k / 2) b[k - x % k]++;
+        else b[x % k]++;
     }
     bool f = true;
     for (auto [k, v] : a){
