@@ -2,7 +2,7 @@
 
 using namespace std;
 
-using ll = long long;
+using i64 = long long;
 using pii = pair<int, int>;
 
 void solve()
@@ -11,8 +11,7 @@ void solve()
 
 int main()
 {
-    ios::sync_with_stdio(false);  
-    cin.tie(nullptr), cout.tie(nullptr);  
+    cin.tie(nullptr)->sync_with_stdio(false); 
     int t = 1;
     cin >> t;
     while (t--)
